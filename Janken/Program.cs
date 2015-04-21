@@ -12,7 +12,7 @@ namespace Janken
     {
         static void Main(string[] args)
         {
-            byte[] pressKey = new byte[256];     // 押されたキーボードの格納用配列
+            byte[] pressKey = new byte[256];        // 押されたキーボードの格納用配列
 
             DX.ChangeWindowMode(DX.TRUE);       // 画面をウィンドウモードにする
             DX.SetGraphMode(800, 600, 32);      // 画面の解像度設定
@@ -29,11 +29,17 @@ namespace Janken
             /* メインループ */
             while (DX.ScreenFlip() == 0 && DX.ProcessMessage() == 0 && DX.ClearDrawScreen() == 0 && DX.GetHitKeyStateAll(out pressKey[0]) == 0)
             {
-                /* Kキーが押されたらループを抜ける */
-                if (pressKey[DX.KEY_INPUT_K] == 1)
-                    break;
+                switch (GameData.gmprogstat)
+                {
+                    case GameData.GameProgressStatus.StartScreen:
+                        break;
 
-                DX.DrawString(100, 100, "Hello!!", DX.GetColor(0, 100, 255));       // 文字表示
+                    case GameData.GameProgressStatus.GamePlay:
+                        break;
+                }
+
+                if (pressKey[DX.KEY_INPUT_ESCAPE] == 1)
+                    break;
             }
 
             DX.DxLib_End();     // DXライブラリの終了

@@ -14,19 +14,33 @@ namespace Janken
          * ゲーム定数の定義
          **************************************/
 
-        static enum GameProgressStatus
+        public enum GameProgressStatus
         {
             StartScreen,        /* スタート画面 */
             GamePlay            /* ゲームプレイ画面 */
         }
 
-        static enum GamePlayStatus
+        public enum GamePlayStatus
         {
+            Prog01,             /* 手の選択画面まで */
             HandSelect,         /* 手の選択画面 */
+            Prog02,             /* 勝敗判定まで */
             SelectContinue,     /* 続けるかの選択画面 */
-            None                /* それ以外 */
         }
 
+        #endregion
+
+
+
+        #region
+
+        /**************************************
+         * プロパティ
+         **************************************/
+
+        public static GameProgressStatus gmprogstat { get; set; }       /* ゲームの進行状況プロパティ用 */
+        public static GamePlayStatus gmplaystat { get; set; }           /* ゲームプレイの進行状況プロパティ用 */
+        
         #endregion
 
 
@@ -41,7 +55,7 @@ namespace Janken
         /// ゲームのスタート画面の処理メソッド
         /// </summary>
         /// <returns>正常終了時: 0。それ以外: -1</returns>
-        static int Start_Screen()
+        public static int Start_Screen()
         {
             return 0;
         }
@@ -50,11 +64,22 @@ namespace Janken
         /// ゲームプレイ画面の処理メソッド
         /// </summary>
         /// <returns>正常終了時: 0。それ以外: -1</returns>
-        static int GamePlay()
+        public static int GamePlay()
         {
             return 0;
         }
 
         #endregion
+
+
+
+        /// <summary>
+        /// コンストラクター
+        /// </summary>
+        static GameData()
+        {
+            gmprogstat = GameProgressStatus.StartScreen;
+            gmplaystat = GamePlayStatus.Prog01;
+        }
     }
 }
