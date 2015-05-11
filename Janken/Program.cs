@@ -33,7 +33,7 @@ namespace Janken
                 if (pressKey[DX.KEY_INPUT_K] == 1)
                     break;
 
-                DX.DrawString(100, 100, "Hello!!", DX.GetColor(0, 100, 255));       // 文字表示
+                DX.DrawString(100, 100, "こんちは!!", DX.GetColor(0, 100, 255));       // 文字表示
             }
 
             DX.DxLib_End();     // DXライブラリの終了
