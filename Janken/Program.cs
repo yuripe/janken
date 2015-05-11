@@ -25,6 +25,7 @@ namespace Janken
 
             DX.SetDrawScreen(DX.DX_SCREEN_BACK);        // 描画先を裏画面にする
 
+            GameData.InitStartScreen();     // スタート画面初期化
 
             /* メインループ */
             while (DX.ScreenFlip() == 0 && DX.ProcessMessage() == 0 && DX.ClearDrawScreen() == 0 && DX.GetHitKeyStateAll(out pressKey[0]) == 0)
@@ -32,9 +33,11 @@ namespace Janken
                 switch (GameData.gmprogstat)
                 {
                     case GameData.GameProgressStatus.StartScreen:
+                        GameData.Start_Screen();
                         break;
 
                     case GameData.GameProgressStatus.GamePlay:
+                        GameData.GamePlay();
                         break;
                 }
 
