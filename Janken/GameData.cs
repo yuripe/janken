@@ -39,17 +39,17 @@ namespace Janken
          * プロパティ
          **************************************/
 
-        public static GameProgressStatus gmprogstat { get; set; }       /* ゲームの進行状況プロパティ用 */
-        public static GamePlayStatus gmplaystat { get; set; }           /* ゲームプレイの進行状況プロパティ用 */
-        
+        public GameProgressStatus gmprogstat { get; set; }       /* ゲームの進行状況プロパティ用 */
+        public GamePlayStatus gmplaystat { get; set; }           /* ゲームプレイの進行状況プロパティ用 */
+
         #endregion
 
-        private static int startScreen_BackGraph = -1;     /* スタート画面の背景画像用変数 */
+        private int startScreen_BackGraph = -1;      /* スタート画面の背景画像用変数 */
 
-        private static int gamePlay_BackGraph = -1;        /* ゲームプレイ画面の背景画像用変数 */
-        private static int gamePlay_HandGoo = -1;          /* グーの手の画像用変数 */
-        private static int gamePlay_HandScissors = -1;     /* チョキの手の画像用変数 */
-        private static int gamePlay_HandPer = -1;          /* パーの手の画像用変数 */
+        private int gamePlay_BackGraph = -1;         /* ゲームプレイ画面の背景画像用変数 */
+        private int gamePlay_HandGoo = -1;           /* グーの手の画像用変数 */
+        private int gamePlay_HandScissors = -1;      /* チョキの手の画像用変数 */
+        private int gamePlay_HandPer = -1;           /* パーの手の画像用変数 */
 
 
 
@@ -63,10 +63,8 @@ namespace Janken
         /// ゲームのスタート画面の処理メソッド
         /// </summary>
         /// <returns>正常終了時: 0。それ以外: -1</returns>
-        public static int Start_Screen()
+        public int Start_Screen()
         {
-
-
             return 0;
         }
 
@@ -74,7 +72,7 @@ namespace Janken
         /// ゲームプレイ画面の処理メソッド
         /// </summary>
         /// <returns>正常終了時: 0。それ以外: -1</returns>
-        public static int GamePlay()
+        public int GamePlay()
         {
             return 0;
         }
@@ -88,11 +86,11 @@ namespace Janken
         /**************************************
          * 場面ごとの初期化・終了時のメソッド
          **************************************/
-
+        
         /// <summary>
         /// スタート画面で使用する画像などの初期化をするメソッド
         /// </summary>
-        public static void InitStartScreen()
+        public void InitStartScreen()
         {
             startScreen_BackGraph = DX.LoadGraph("img/startScreen_BackGraph.png");      // スタート画面の背景読み込み
         }
@@ -100,7 +98,7 @@ namespace Janken
         /// <summary>
         /// スタート画面ではなくなる時に呼び出すメソッド
         /// </summary>
-        public static void EndStartScreen()
+        public void EndStartScreen()
         {
             DX.DeleteGraph(startScreen_BackGraph);      // リソースの解放
         }
@@ -108,7 +106,7 @@ namespace Janken
         /// <summary>
         /// ゲームプレイ画面で使用する画像などの初期化をするメソッド
         /// </summary>
-        public static void InitGamePlay()
+        public void InitGamePlay()
         {
             gamePlay_BackGraph = DX.LoadGraph("img/gamePlay_BackGraph.png");        // ゲームプレイ画面の背景読み込み
             gamePlay_HandGoo = DX.LoadGraph("img/gamePlay_HandGoo.png");            // グーの画像の読み込み
@@ -119,22 +117,41 @@ namespace Janken
         /// <summary>
         /// ゲームプレイ画面ではなくなる時に呼び出すメソッド
         /// </summary>
-        public static void EndGamePlay()
+        public void EndGamePlay()
         {
             DX.DeleteGraph(gamePlay_BackGraph);         // リソースの解放
             DX.DeleteGraph(gamePlay_HandGoo);           // リソースの解放
             DX.DeleteGraph(gamePlay_HandScissors);      // リソースの解放
             DX.DeleteGraph(gamePlay_HandPer);           // リソースの解放
         }
-
+        
         #endregion
 
 
 
         /// <summary>
+        /// 文字列の中央表示をするために必要なX座標を取得するメソッド
+        /// </summary>
+        /// <param name="str">対象文字列</param>
+        /// <returns></returns>
+        private int CalcCenterX(string str)
+        {
+            int x1 = 0, x2 = 0;
+            int y = 0;
+            int strWidth;
+
+            DX.GetWindowSize(out x2, out y);
+
+
+            strWidth = DX.GetDrawStringWidth(str, Encoding.GetEncoding("Shift_JIS").GetByteCount(str));
+
+            return (int)((x1 + ((x2 - x1) / 2)) - (strWidth / 2));
+        }
+
+        /// <summary>
         /// コンストラクター
         /// </summary>
-        static GameData()
+        public GameData()
         {
             gmprogstat = GameProgressStatus.StartScreen;
             gmplaystat = GamePlayStatus.Prog01;
