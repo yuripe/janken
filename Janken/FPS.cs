@@ -10,11 +10,11 @@ namespace Janken
     // FPSの制御クラス
     public class FPS
     {
-        int starttime;
-        int count;
-        float mfps;
-        int n = 30;
-        int fps = 30;
+        private int starttime;
+        private int count;
+        private float mfps;
+        private int n = 30;
+        private int fps = 30;
 
         /// <summary>
         /// コンストラクター
@@ -60,7 +60,7 @@ namespace Janken
         /// <returns>現在のFPS</returns>
         public float getFPS()
         {
-            return fps;
+            return mfps;
         }
 
         /// <summary>
@@ -69,10 +69,9 @@ namespace Janken
         public void wait()
         {
             int ttime = DX.GetNowCount() - starttime;
-            int wtime = (int)(count * 1000 / mfps - ttime);
+            int wtime = count * 1000 / fps - ttime;
             if (wtime > 0)
                 DX.WaitTimer(wtime);
-
         }
     }
 }

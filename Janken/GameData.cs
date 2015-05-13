@@ -39,17 +39,20 @@ namespace Janken
          * プロパティ
          **************************************/
 
-        public GameProgressStatus gmprogstat { get; set; }       /* ゲームの進行状況プロパティ用 */
-        public GamePlayStatus gmplaystat { get; set; }           /* ゲームプレイの進行状況プロパティ用 */
+        public GameProgressStatus gmprogstat { get; set; }      /* ゲームの進行状況プロパティ用 */
+        public GamePlayStatus gmplaystat { get; set; }          /* ゲームプレイの進行状況プロパティ用 */
+        public int GameFPS { get; set; }                        /* ゲームのFPS */
 
         #endregion
 
-        private int startScreen_BackGraph = -1;      /* スタート画面の背景画像用変数 */
+        private int startScreen_BackGraph = -1;     /* スタート画面の背景画像用変数 */
+        private int selectMenuId = 0;               /* 選択されたメニュー用変数 */
+        private bool isPressKey = false;            /* 前のフレームでキーボードを押していたか */
 
-        private int gamePlay_BackGraph = -1;         /* ゲームプレイ画面の背景画像用変数 */
-        private int gamePlay_HandGoo = -1;           /* グーの手の画像用変数 */
-        private int gamePlay_HandScissors = -1;      /* チョキの手の画像用変数 */
-        private int gamePlay_HandPer = -1;           /* パーの手の画像用変数 */
+        private int gamePlay_BackGraph = -1;        /* ゲームプレイ画面の背景画像用変数 */
+        private int gamePlay_HandGoo = -1;          /* グーの手の画像用変数 */
+        private int gamePlay_HandScissors = -1;     /* チョキの手の画像用変数 */
+        private int gamePlay_HandPer = -1;          /* パーの手の画像用変数 */
 
 
 
@@ -62,8 +65,9 @@ namespace Janken
         /// <summary>
         /// ゲームのスタート画面の処理メソッド
         /// </summary>
+        /// <param name="key">押されたキーボードの情報配列</param>
         /// <returns>正常終了時: 0。それ以外: -1</returns>
-        public int Start_Screen()
+        public int Start_Screen(byte[] key)
         {
             return 0;
         }
@@ -71,8 +75,9 @@ namespace Janken
         /// <summary>
         /// ゲームプレイ画面の処理メソッド
         /// </summary>
+        /// <param name="key">押されたキーボードの情報配列</param>
         /// <returns>正常終了時: 0。それ以外: -1</returns>
-        public int GamePlay()
+        public int GamePlay(byte[] key)
         {
             return 0;
         }
