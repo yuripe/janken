@@ -46,11 +46,9 @@ namespace Janken
 
         #endregion
 
-        private int startScreen_BackGraph = -1;     /* スタート画面の背景画像用変数 */
         private int selectMenuId = 0;               /* 選択されたメニュー用変数 */
         private bool isPressKey = false;            /* 前のフレームでキーボードを押していたか */
 
-        private int gamePlay_BackGraph = -1;        /* ゲームプレイ画面の背景画像用変数 */
         private int gamePlay_HandGoo = -1;          /* グーの手の画像用変数 */
         private int gamePlay_HandScissors = -1;     /* チョキの手の画像用変数 */
         private int gamePlay_HandPer = -1;          /* パーの手の画像用変数 */
@@ -140,7 +138,7 @@ namespace Janken
         /// </summary>
         public void InitStartScreen()
         {
-            startScreen_BackGraph = DX.LoadGraph("img/startScreen_BackGraph.png");      // スタート画面の背景読み込み
+            
         }
 
         /// <summary>
@@ -148,7 +146,7 @@ namespace Janken
         /// </summary>
         public void EndStartScreen()
         {
-            DX.DeleteGraph(startScreen_BackGraph);      // リソースの解放
+            
         }
 
         /// <summary>
@@ -156,10 +154,9 @@ namespace Janken
         /// </summary>
         public void InitGamePlay()
         {
-            gamePlay_BackGraph = DX.LoadGraph("img/gamePlay_BackGraph.png");        // ゲームプレイ画面の背景読み込み
-            gamePlay_HandGoo = DX.LoadGraph("img/gamePlay_HandGoo.png");            // グーの画像の読み込み
-            gamePlay_HandScissors = DX.LoadGraph("img/HandScissors.png");           // チョキの画像の読み込み
-            gamePlay_HandPer = DX.LoadGraph("img/HandPer.png");                     // パーの画像の読み込み
+            gamePlay_HandGoo = DX.LoadGraph("img/gamePlay_HandGoo.png");                     // グーの画像の読み込み
+            gamePlay_HandScissors = DX.LoadGraph("img/gamePlay_HandScissors.png");           // チョキの画像の読み込み
+            gamePlay_HandPer = DX.LoadGraph("img/gamePlay_HandPer.png");                     // パーの画像の読み込み
         }
 
         /// <summary>
@@ -167,7 +164,16 @@ namespace Janken
         /// </summary>
         public void EndGamePlay()
         {
-            DX.DeleteGraph(gamePlay_BackGraph);         // リソースの解放
+            DX.DeleteGraph(gamePlay_HandGoo);           // リソースの解放
+            DX.DeleteGraph(gamePlay_HandScissors);      // リソースの解放
+            DX.DeleteGraph(gamePlay_HandPer);           // リソースの解放
+        }
+
+        /// <summary>
+        /// デストラクター
+        /// </summary>
+        public ~GameData()
+        {
             DX.DeleteGraph(gamePlay_HandGoo);           // リソースの解放
             DX.DeleteGraph(gamePlay_HandScissors);      // リソースの解放
             DX.DeleteGraph(gamePlay_HandPer);           // リソースの解放
