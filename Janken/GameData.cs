@@ -18,7 +18,8 @@ namespace Janken
         public enum GameProgressStatus
         {
             StartScreen,        /* スタート画面 */
-            GamePlay            /* ゲームプレイ画面 */
+            GamePlay,           /* ゲームプレイ画面 */
+            END                 /* ゲーム終了 */
         }
 
         public enum GamePlayStatus
@@ -69,6 +70,48 @@ namespace Janken
         /// <returns>正常終了時: 0。それ以外: -1</returns>
         public int Start_Screen(byte[] key)
         {
+            // 上キー or 下キーが押されていたらメニュー選択の切り替え
+            if ((key[DX.KEY_INPUT_UP] == 1 && !isPressKey) || (key[DX.KEY_INPUT_DOWN] == 1 && !isPressKey))
+            {
+                selectMenuId = selectMenuId == 0 ? 1 : 0;
+                isPressKey = true;
+            }
+
+            if (key[DX.KEY_INPUT_RETURN] == 1)      // メニューを選択（Enter）
+            {
+                // ゲームスタートを選択, ゲーム画面へ
+                if (selectMenuId == 0)
+                    gmprogstat = GameProgressStatus.GamePlay;
+                
+                // 終了を選択, 終了画面へ
+                else
+                    gmprogstat = GameProgressStatus.END;
+            }
+
+            // キーフラグの解除
+            if (key[DX.KEY_INPUT_UP] == 0 && key[DX.KEY_INPUT_DOWN] == 0 && isPressKey)
+            {
+                isPressKey = false;
+            }
+
+            int x = CalcCenterX("-> ゲームスタート"), y = 360;                                          // 文字の表示位置
+            int selectColor = DX.GetColor(255, 100, 100), menuColor = DX.GetColor(255, 255, 255);       // メニューの文字カラー
+
+            // 選択されているメニューによって表示を変える
+            switch (selectMenuId)
+            {
+                case 0:     // ゲームスタートが選択されている
+                    DX.DrawString(x - DX.GetFontSize() * 3, y, "-> ", selectColor);
+                    DX.DrawString(x, y, "ゲームスタート", selectColor);
+                    DX.DrawString(x, (int)(y + DX.GetFontSize() * 1.5), "終了", menuColor);
+                    break;
+                case 1:     // 終了が選択されている
+                    DX.DrawString(x - DX.GetFontSize() * 3, (int)(y + DX.GetFontSize() * 1.5), "-> ", selectColor);
+                    DX.DrawString(x, y, "ゲームスタート", menuColor);
+                    DX.DrawString(x, (int)(y + DX.GetFontSize() * 1.5), "終了", selectColor);
+                    break;
+            }
+
             return 0;
         }
 
@@ -91,7 +134,7 @@ namespace Janken
         /**************************************
          * 場面ごとの初期化・終了時のメソッド
          **************************************/
-        
+
         /// <summary>
         /// スタート画面で使用する画像などの初期化をするメソッド
         /// </summary>
@@ -129,7 +172,7 @@ namespace Janken
             DX.DeleteGraph(gamePlay_HandScissors);      // リソースの解放
             DX.DeleteGraph(gamePlay_HandPer);           // リソースの解放
         }
-        
+
         #endregion
 
 

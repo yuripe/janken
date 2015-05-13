@@ -28,7 +28,7 @@ namespace Janken
             DX.SetDrawScreen(DX.DX_SCREEN_BACK);        // 描画先を裏画面にする
 
             GameData gameData = new GameData();     // ゲームクラスの初期化
-            FPS fps = new FPS(GAME_FPS);                  // FPS制御クラスの初期化
+            FPS fps = new FPS(GAME_FPS);            // FPS制御クラスの初期化
 
             gameData.InitStartScreen();             // スタート画面初期化
             gameData.GameFPS = GAME_FPS;
@@ -36,6 +36,9 @@ namespace Janken
             /* メインループ */
             while (DX.ScreenFlip() == 0 && DX.ProcessMessage() == 0 && DX.ClearDrawScreen() == 0 && DX.GetHitKeyStateAll(out key[0]) == 0 && fps.Update())
             {
+                if (gameData.gmprogstat == GameData.GameProgressStatus.END)     // 終了画面へ
+                    break;
+
                 switch (gameData.gmprogstat)
                 {
                     case GameData.GameProgressStatus.StartScreen:
@@ -47,7 +50,7 @@ namespace Janken
                         break;
                 }
 
-                DX.DrawString(0, 0, fps.getFPS().ToString("0.0fps"), DX.GetColor(100, 100, 100));
+                DX.DrawString(0, 0, fps.getFPS().ToString("0.0fps"), DX.GetColor(100, 100, 100));       // FPS表示
                 fps.wait();     // 待機
             }
 
