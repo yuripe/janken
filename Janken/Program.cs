@@ -30,8 +30,7 @@ namespace Janken
             GameData gameData = new GameData();     // ゲームクラスの初期化
             FPS fps = new FPS(GAME_FPS);            // FPS制御クラスの初期化
 
-            gameData.InitStartScreen();             // スタート画面初期化
-            gameData.GameFPS = GAME_FPS;
+            gameData.GameFPS = GAME_FPS;            // FPSのセット
 
             /* メインループ */
             while (DX.ScreenFlip() == 0 && DX.ProcessMessage() == 0 && DX.ClearDrawScreen() == 0 && DX.GetHitKeyStateAll(out key[0]) == 0 && fps.Update())

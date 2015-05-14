@@ -79,11 +79,18 @@ namespace Janken
             {
                 // ゲームスタートを選択, ゲーム画面へ
                 if (selectMenuId == 0)
+                {
                     gmprogstat = GameProgressStatus.GamePlay;
-                
+                    InitGamePlay();     // ゲームプレイ画面のリソース準備
+                    EndStartScreen();   // スタート画面のリソース開放
+                }
+
                 // 終了を選択, 終了画面へ
                 else
+                {
                     gmprogstat = GameProgressStatus.END;
+                    EndStartScreen();   // スタート画面のリソース開放
+                }
             }
 
             // キーフラグの解除
@@ -120,6 +127,14 @@ namespace Janken
         /// <returns>正常終了時: 0。それ以外: -1</returns>
         public int GamePlay(byte[] key)
         {
+            DX.DrawGraph(100, 100, gamePlay_HandGoo, DX.TRUE);
+
+            if (key[DX.KEY_INPUT_ESCAPE] == 1)
+            {
+                gmprogstat = GameProgressStatus.END;
+                EndGamePlay();      // ゲーム画面のリソース開放
+            }
+
             return 0;
         }
 
@@ -172,7 +187,7 @@ namespace Janken
         /// <summary>
         /// デストラクター
         /// </summary>
-        public ~GameData()
+        ~GameData()
         {
             DX.DeleteGraph(gamePlay_HandGoo);           // リソースの解放
             DX.DeleteGraph(gamePlay_HandScissors);      // リソースの解放
@@ -209,6 +224,7 @@ namespace Janken
         {
             gmprogstat = GameProgressStatus.StartScreen;
             gmplaystat = GamePlayStatus.Prog01;
+            InitStartScreen();      // スタート画面のリソース準備
         }
     }
 }
