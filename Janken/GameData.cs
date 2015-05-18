@@ -43,6 +43,13 @@ namespace Janken
             DRAW,
             LOSE
         }
+        /* 勝敗のグローバル変数 */
+        int w = 0;    /* 勝ち */
+        int l = 0;    /* 負け */
+        int d = 0;    /* あいこ */
+        int d2 = 0;
+        int w2 = 0;
+        int l2 = 0;
 
         #endregion
 
@@ -118,6 +125,13 @@ namespace Janken
             int x = CalcCenterX("-> ゲームスタート") - DX.GetFontSize(), y = 360;                       // 文字の表示位置
             int selectColor = DX.GetColor(255, 100, 100), menuColor = DX.GetColor(255, 255, 255);       // メニューの文字カラー
 
+            /* タイトル */
+            DX.SetFontSize(36);
+            DX.DrawString(CalcCenterX("じゃんけんゲーム"), 235, "じゃんけんゲーム", DX.GetColor(255, 153, 0));
+
+            DX.SetFontSize(16);
+
+
             // 選択されているメニューによって表示を変える
             switch (selectMenuId)
             {
@@ -146,6 +160,7 @@ namespace Janken
                 case GamePlayStatus.Prog01: // ゲームプレイ第1場面
                     if (frameCounter <= 60) // 60フレーム以下（2秒間）
                     {
+
                         DX.SetFontSize(24); // 文字のサイズの変更
                         DX.DrawString(CalcCenterX("ゲームを開始します"), 288, "ゲームを開始します", DX.GetColor(200, 200, 200));
 
@@ -161,6 +176,11 @@ namespace Janken
 
                         DX.SetFontSize(16);
                         frameCounter++;
+
+                        /* 判定用変数の初期化 */
+                        d2 = 0;
+                        w2 = 0;
+                        l2 = 0;
                     }
                     else if (frameCounter <= 180) // 180フレーム以下（2秒間）
                     {
@@ -276,6 +296,8 @@ namespace Janken
                         int x = CalcCenterX("もう一度") - DX.GetFontSize(), y = 360;                                // 文字の表示位置
                         int selectColor = DX.GetColor(255, 100, 100), menuColor = DX.GetColor(255, 255, 255);       // メニューの文字カラー
 
+                        DX.DrawString(CalcCenterX("0勝0敗0分"), 235, w +"勝"+ l +"敗"+ d +"分", DX.GetColor(255, 255, 255));   //勝敗の表示
+
                         // 選択されているメニューによって表示を変える
                         switch (selectMenuId)
                         {
@@ -388,10 +410,16 @@ namespace Janken
             switch (j)
             {
                 case 0:
+                    d2++;
+                    if (d2 >= 60){d++;}
                     return JudgeResult.DRAW;
                 case 2:
+                    w2++;
+                    if (w2 >= 60){w++;}
                     return JudgeResult.WIN;
                 default:
+                    l2++;
+                    if (l2 >= 60){l++;}
                     return JudgeResult.LOSE;
             }
         }
