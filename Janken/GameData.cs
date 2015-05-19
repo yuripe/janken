@@ -43,13 +43,18 @@ namespace Janken
             DRAW,
             LOSE
         }
+
         /* 勝敗のグローバル変数 */
-        int w = 0;    /* 勝ち */
-        int l = 0;    /* 負け */
-        int d = 0;    /* あいこ */
-        int d2 = 0;
-        int w2 = 0;
-        int l2 = 0;
+        int win = 0;    /* 勝ち */
+        int lose = 0;    /* 負け */
+        int draw = 0;    /* あいこ */
+        int convictory = 0; /* 連勝 */
+        int lostreak = 0;  /* 連敗 */
+        int judgwin = 0; /* 勝ち判定用 */
+        int judglose = 0; /* 負け判定用 */
+        int judgdraw = 0; /* あいこ判定用 */
+        int judgconvictory = 0; /* 連勝判定用 */
+        int judglost = 0;  /* 連敗判定用 */
 
         #endregion
 
@@ -178,9 +183,9 @@ namespace Janken
                         frameCounter++;
 
                         /* 判定用変数の初期化 */
-                        d2 = 0;
-                        w2 = 0;
-                        l2 = 0;
+                        judgdraw = 0;
+                        judgwin = 0;
+                        judglose = 0;
                     }
                     else if (frameCounter <= 180) // 180フレーム以下（2秒間）
                     {
@@ -203,6 +208,10 @@ namespace Janken
                     DX.DrawString(CalcCenterX("手を選んでください！"), 264, "手を選んでください！", DX.GetColor(200, 200, 200));
                     DX.DrawString(CalcCenterX("グー…0　チョキ…1　パー…2"), 288, "グー…0　チョキ…1　パー…2", DX.GetColor(255, 100, 100));
 
+                    
+                    DX.DrawString(600, 0, judgconvictory + "連勝", DX.GetColor(255, 255, 255));   //連勝の表示
+                    DX.DrawString(700, 0, judglost + "連敗", DX.GetColor(255, 255, 255));   //連敗の表示
+                    
                     DX.DrawRotaGraph(400, 100, 0.34, Math.PI, gamePlay_HandImg[(int)Hand.Goo], DX.TRUE);   // 相手の手の画像を表示
 
                     DX.DrawRotaGraph(100, 500, 0.34, 0, gamePlay_HandImg[(int)Hand.Goo], DX.TRUE);        // 手の画像を表示　グー
@@ -250,12 +259,25 @@ namespace Janken
                         {
                             case JudgeResult.WIN:
                                 DX.DrawString(CalcCenterX("あなたの勝ち！！"), 288, "あなたの勝ち！！", DX.GetColor(255, 50, 50));
+                                /* 連敗と連勝判定の初期化 */
+                                lostreak = 0;
+                                judglost = 0;
+                                convictory = 0;
                                 break;
                             case JudgeResult.DRAW:
                                 DX.DrawString(CalcCenterX("引き分け"), 288, "引き分け", DX.GetColor(50, 255, 50));
+                                /* 連勝と連敗と判定の初期化 */
+                                convictory = 0;
+                                judgconvictory = 0;
+                                lostreak = 0;
+                                judglost = 0;
                                 break;
                             case JudgeResult.LOSE:
                                 DX.DrawString(CalcCenterX("あなたの負け・・"), 288, "あなたの負け・・", DX.GetColor(50, 50, 255));
+                                /* 連勝と連敗判定の初期化 */
+                                convictory = 0;
+                                judgconvictory = 0;
+                                lostreak = 0;
                                 break;
                         }
 
@@ -296,7 +318,7 @@ namespace Janken
                         int x = CalcCenterX("もう一度") - DX.GetFontSize(), y = 360;                                // 文字の表示位置
                         int selectColor = DX.GetColor(255, 100, 100), menuColor = DX.GetColor(255, 255, 255);       // メニューの文字カラー
 
-                        DX.DrawString(CalcCenterX("0勝0敗0分"), 235, w +"勝"+ l +"敗"+ d +"分", DX.GetColor(255, 255, 255));   //勝敗の表示
+                        DX.DrawString(CalcCenterX("0勝0敗0分"), 235, win + "勝" + lose + "敗" + draw + "分", DX.GetColor(255, 255, 255));   //勝敗の表示
 
                         // 選択されているメニューによって表示を変える
                         switch (selectMenuId)
@@ -410,16 +432,24 @@ namespace Janken
             switch (j)
             {
                 case 0:
-                    d2++;
-                    if (d2 >= 60){d++;}
+                    judgdraw++;
+                    if (judgdraw >= 60) { draw++; }
                     return JudgeResult.DRAW;
                 case 2:
-                    w2++;
-                    if (w2 >= 60){w++;}
+                    judgwin++;
+                    if (judgwin >= 60) { win++; }
+                    /* 連勝時 */
+                    convictory++;
+                    if (convictory >= 60) { judgconvictory++; }
+
                     return JudgeResult.WIN;
                 default:
-                    l2++;
-                    if (l2 >= 60){l++;}
+                    judglose++;
+                    if (lose >= 60){lose++;}
+                    /* 連敗時 */
+                    lostreak++;
+                    if (lostreak >= 60) { judglost++; }
+
                     return JudgeResult.LOSE;
             }
         }
