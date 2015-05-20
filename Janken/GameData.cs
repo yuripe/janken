@@ -37,6 +37,12 @@ namespace Janken
             Per         /* パー */
         }
 
+        enum Face
+        { 
+            Win_img,   /* 勝利時の顔 */
+            Lose_img   /* 敗北時の顔 */
+        }
+
         enum JudgeResult
         {
             WIN,
@@ -71,6 +77,7 @@ namespace Janken
         private bool isPressKey = false;            /* 前のフレームでキーボードを押していたか */
 
         private int[] gamePlay_HandImg = new int[] { -1, -1, -1 };    /* 手の画像を格納する配列変数（定数でアクセス可能） */
+        private int[] gamePlay_FaceImg = new int[] { -1, -1 };        /* ゲーム結果に出る顔の画像を格納するもの */
         private int frameCounter = 1;                                 /* 何フレーム目かをカウントする変数 */
         private Hand playerHand = 0;                                  /* プレイヤーの選択した手を保存する変数 */
         private Hand enemyHand = 0;                                   /* 敵の選択した手を保存する変数 */
@@ -105,6 +112,7 @@ namespace Janken
                 {
                     gmprogstat = GameProgressStatus.GamePlay;
                     InitGamePlay();     // ゲームプレイ画面のリソース準備
+                    JudgeFace();        // ゲーム結果の画像のリソース準備
                     EndStartScreen();   // スタート画面のリソース開放
                 }
 
@@ -123,11 +131,11 @@ namespace Janken
             }
 
             int x = CalcCenterX("-> ゲームスタート") - DX.GetFontSize(), y = 360;                       // 文字の表示位置
-            int selectColor = DX.GetColor(255, 100, 100), menuColor = DX.GetColor(255, 255, 255);       // メニューの文字カラー
+            uint selectColor = DX.GetColor(255, 100, 100), menuColor = DX.GetColor(255, 255, 255);       // メニューの文字カラー
 
             /* タイトル */
             DX.SetFontSize(36);
-            DX.DrawString(CalcCenterX("じゃんけんゲーム"), 235, "じゃんけんゲーム", DX.GetColor(255, 153, 0));
+            DX.DrawString(CalcCenterX("☆じゃんけんゲーム☆"), 235, "☆じゃんけんゲーム☆", DX.GetColor(255, 153, 0));
 
             DX.SetFontSize(16);
 
@@ -136,8 +144,8 @@ namespace Janken
             switch (selectMenuId)
             {
                 case 0:     // ゲームスタートが選択されている
-                    DX.DrawString(x, y, "-> ゲームスタート", selectColor);
-                    DX.DrawString(x, (int)(y + DX.GetFontSize() * 1.5), "   終了", menuColor);
+                   DX.DrawString(x, y, "-> ゲームスタート", selectColor);
+                   DX.DrawString(x, (int)(y + DX.GetFontSize() * 1.5), "   終了", menuColor);
                     break;
                 case 1:     // 終了が選択されている
                     DX.DrawString(x, y, "   ゲームスタート", menuColor);
@@ -249,12 +257,15 @@ namespace Janken
                         switch(judgeResult)     // 判定ごとの表示
                         {
                             case JudgeResult.WIN:
+                                DX.DrawRotaGraph(390, 150, 0.34, 0, gamePlay_FaceImg[(int)Face.Win_img], DX.TRUE);
                                 DX.DrawString(CalcCenterX("あなたの勝ち！！"), 288, "あなたの勝ち！！", DX.GetColor(255, 50, 50));
                                 break;
                             case JudgeResult.DRAW:
+                                DX.DrawRotaGraph(390, 150, 0.34, 0, gamePlay_FaceImg[(int)Face.Lose_img], DX.TRUE);
                                 DX.DrawString(CalcCenterX("引き分け"), 288, "引き分け", DX.GetColor(50, 255, 50));
                                 break;
                             case JudgeResult.LOSE:
+                                DX.DrawRotaGraph(390, 150, 0.34, 0, gamePlay_FaceImg[(int)Face.Lose_img], DX.TRUE);
                                 DX.DrawString(CalcCenterX("あなたの負け・・"), 288, "あなたの負け・・", DX.GetColor(50, 50, 255));
                                 break;
                         }
@@ -294,7 +305,7 @@ namespace Janken
                         }
 
                         int x = CalcCenterX("もう一度") - DX.GetFontSize(), y = 360;                                // 文字の表示位置
-                        int selectColor = DX.GetColor(255, 100, 100), menuColor = DX.GetColor(255, 255, 255);       // メニューの文字カラー
+                        uint selectColor = DX.GetColor(255, 100, 100), menuColor = DX.GetColor(255, 255, 255);       // メニューの文字カラー
 
                         DX.DrawString(CalcCenterX("0勝0敗0分"), 235, w +"勝"+ l +"敗"+ d +"分", DX.GetColor(255, 255, 255));   //勝敗の表示
 
@@ -352,6 +363,15 @@ namespace Janken
             gamePlay_HandImg[(int)Hand.Goo] = DX.LoadGraph("img/gamePlay_HandGoo.png");                     // グーの画像の読み込み
             gamePlay_HandImg[(int)Hand.Scissors] = DX.LoadGraph("img/gamePlay_HandScissors.png");           // チョキの画像の読み込み
             gamePlay_HandImg[(int)Hand.Per] = DX.LoadGraph("img/gamePlay_HandPer.png");                     // パーの画像の読み込み
+        }
+
+        /// <summary>
+        /// ゲーム結果で使用する画像
+        /// </summary>
+        public void JudgeFace()
+        {
+            gamePlay_FaceImg[(int)Face.Lose_img] = DX.LoadGraph("img/Lose.png");
+            gamePlay_FaceImg[(int)Face.Win_img] = DX.LoadGraph("img/ex.png");
         }
 
         /// <summary>
