@@ -208,10 +208,12 @@ namespace Janken
                     DX.DrawString(CalcCenterX("手を選んでください！"), 264, "手を選んでください！", DX.GetColor(200, 200, 200));
                     DX.DrawString(CalcCenterX("グー…0　チョキ…1　パー…2"), 288, "グー…0　チョキ…1　パー…2", DX.GetColor(255, 100, 100));
 
-                    
-                    DX.DrawString(600, 0, judgconvictory + "連勝", DX.GetColor(255, 255, 255));   //連勝の表示
-                    DX.DrawString(700, 0, judglost + "連敗", DX.GetColor(255, 255, 255));   //連敗の表示
-                    
+                    if (judgconvictory > 0){
+                        DX.DrawString(600, 0, judgconvictory + "連勝", DX.GetColor(255, 51, 0));   //連勝の表示
+                    }else if (judglost > 0){
+                        DX.DrawString(700, 0, judglost + "連敗", DX.GetColor(0, 153, 255));   //連敗の表示
+                    }
+
                     DX.DrawRotaGraph(400, 100, 0.34, Math.PI, gamePlay_HandImg[(int)Hand.Goo], DX.TRUE);   // 相手の手の画像を表示
 
                     DX.DrawRotaGraph(100, 500, 0.34, 0, gamePlay_HandImg[(int)Hand.Goo], DX.TRUE);        // 手の画像を表示　グー
@@ -445,7 +447,7 @@ namespace Janken
                     return JudgeResult.WIN;
                 default:
                     judglose++;
-                    if (lose >= 60){lose++;}
+                    if (judglose >= 60){lose++;}
                     /* 連敗時 */
                     lostreak++;
                     if (lostreak >= 60) { judglost++; }
