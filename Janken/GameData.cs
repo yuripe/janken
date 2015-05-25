@@ -215,9 +215,9 @@ namespace Janken
                     DX.DrawString(CalcCenterX("手を選んでください！"), 264, "手を選んでください！", DX.GetColor(200, 200, 200));
                     DX.DrawString(CalcCenterX("グー…0　チョキ…1　パー…2"), 288, "グー…0　チョキ…1　パー…2", DX.GetColor(255, 100, 100));
 
-                    if (judgconvictory > 0){
+                    if (judgconvictory > 1){
                         DX.DrawString(700, 0, judgconvictory + "連勝", DX.GetColor(255, 51, 0));   //連勝の表示
-                    }else if (judglost > 0){
+                    }else if (judglost > 1){
                         DX.DrawString(700, 0, judglost + "連敗", DX.GetColor(0, 153, 255));   //連敗の表示
                     }
 
